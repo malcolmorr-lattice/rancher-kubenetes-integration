@@ -1,0 +1,45 @@
+{
+	"rancherVersion": "2.2.1",
+	"clusterid": "c-1234",
+	"projectid": "c-1234-9g5vw",
+	"charts": {
+		"nginx": {
+			"catalog": "catalog://?catalog=shared-git&template=test-chart&version=0.1.0",
+			"name": "test-nginx",
+			"description": "test nginx deployment",
+			"answers": {"controller.stats.enabled": "true"},
+			"ingress": {"hostname": "nginx.test.uk","targetPort": 8080}
+		}
+	},
+	"bearer": "token-5klw5:9rbdqh582zmzfr44lq7p6lv8njc",
+	"host": "https://10.1.1.1",
+	"containerLimits": {},
+	"claimStorage": "4Gi",
+	"volumeStorage": "4Gi",
+	"accessModes": ["ReadWriteOnce"],
+	"local": {
+		"path": "/server/rancher-vol2",
+		"type": "/v3/cluster/schemas/localVolumeSource"
+	},
+	"glusterfs": {
+		"endpoints": "gluster",
+		"path": "V2",
+		"readOnly": false,
+		"type": "/v3/cluster/schemas/glusterfsVolumeSource"
+	},
+	"nodeAffinity": {
+		"required": {
+			"nodeSelectorTerms": [{
+				"matchExpressions": [{
+					"key": "cluster",
+					"operator": "In",
+					"type": "/v3/cluster/schemas/nodeSelectorRequirement",
+					"values": ["local"]
+				}],
+				"type": "/v3/cluster/schemas/nodeSelectorTerm"
+			}],
+			"type": "/v3/cluster/schemas/nodeSelector"
+		},
+		"type": "/v3/cluster/schemas/volumeNodeAffinity"
+	}
+}
