@@ -44,7 +44,7 @@ Running env-create
 
 
 #### Flags
-  **--platform** ,sets the configuration file to use for the base platform, ***platfor˜m-1*** is the only supported value at present
+  **--platform** ,sets the configuration file to use for the base platform, ***platform-1*** is the only supported value at present
 
   **--tenant** ,sets the prefix for all K8 resources for    example ***payroll123*** will create a ***payroll123-namespace*** namespace resource
 
