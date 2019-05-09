@@ -3,48 +3,48 @@ python code to perform the following actions using the rancher API
 
   * Create a namespace  (**tenant-name**)
   * Create a persistent volume tied to the project/cluster (**chart**-pv)
-  * create multiple Persistent Volume Claim (based on --charts option) and bind them to the previously created PV (**chart**-claim)
-  * based on the --charts option, deploy the listed charts if there is a mapping in the catalog
-  * based on the --params option, pass any chart parameters to the chart, they **MUST** be prefixed by the chart name so the NGINX parameter ***controller.stats.enabled*** must be prefixed with the NGINX chart name ***nginx.controller.stats.enabled***
+  * Create multiple Persistent Volume Claim (based on --charts option) and bind them to the previously created PV (**chart**-claim)
+  * Based on the --charts option, deploy the listed charts if there is a mapping in the catalog
+  * Based on the --params option, pass any chart parameters to the chart, they **MUST** be prefixed by the chart name so the NGINX parameter ***controller.stats.enabled*** must be prefixed with the NGINX chart name ***nginx.controller.stats.enabled***
   * If an ingress is specified in the chart configuration it will create a ingress for the jenkins, sonarIQ or Nexus subdomains
 
 If any resources with the same name are detected or there is an API connection error the script will exit with a return code of 1, on successful completion the script will exit with a return code of 0
 
-Changes can be made to the **alf_config.json** to change default parameters such as Rancher projectid, cluserid and bearer-token etc.
+Changes can be made to the **platform-1.json** to change default parameters such as Rancher projectid, cluserid and bearer-token etc.
 
 ### basic usage:
 ```bash
-$ cp ./alf-examples/alf_config_example.json ./alf_config.json  (adjust the values in this file accordingly)
+$ cp ./examples/config_example.json ./platform-1.json  (adjust the values in this file accordingly)
 
-$ ./setup-env.py  --platform=alf-on-azure --tenant=test3562 --charts nginx test --params nginx.controller.stats.enabled=false jenkins.test=/devops nginx.controller.readinessProbe.timeoutSeconds=5 --storage local
+$ ./setup-env.py  --platform=platform-1 --tenant=test3562 --charts nginx test --params nginx.controller.stats.enabled=false test.test=/devops nginx.controller.readinessProbe.timeoutSeconds=5 --storage local
 ```
 
 ### example output
 ```bash
-2019-05-07 16:39:36 INFO     platform:alf-on-azure charts:['nginx', 'test'] parameters:['nginx.controller.stats.enabled=false']
-Running devops-common-env-create
-2019-05-07 16:39:41 INFO     successfully created namespace:https://10.179.193.167/v3/cluster/c-qb62x/namespaces/test3562
+2019-05-07 16:39:36 INFO     platform:platform-1 charts:['nginx', 'test'] parameters:['nginx.controller.stats.enabled=false']
+Running env-create
+2019-05-07 16:39:41 INFO     successfully created namespace:https://10.1.1.1/v3/cluster/c-1234/namespaces/test3562
 2019-05-07 16:39:41 INFO     successfully run cmd:['kubectl', 'get', 'pv', '-n', u'test3562']
-2019-05-07 16:39:42 INFO     successfully created volume:https://10.179.193.167/v3/cluster/c-qb62x/persistentVolumes/nginx-pv
-2019-05-07 16:39:47 INFO     successfully created volume claim:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/persistentVolumeClaims/test3562:nginx-claim
+2019-05-07 16:39:42 INFO     successfully created volume:https://10.1.1.1/v3/cluster/c-1234/persistentVolumes/nginx-pv
+2019-05-07 16:39:47 INFO     successfully created volume claim:https://10.1.1.1/v3/project/c-1234:p-nvlcn/persistentVolumeClaims/test3562:nginx-claim
 2019-05-07 16:39:47 INFO     adding parameter:controller.stats.enabled value:false to chart:nginx
-2019-05-07 16:40:07 INFO     using deployment url:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/workloads/deployment:test3562:test3562-test-nginx-test-chart
-2019-05-07 16:40:07 INFO     successfully deployed app:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/apps/p-nvlcn:test3562-test-nginx
-2019-05-07 16:40:07 INFO     successfully deployed workload:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/workloads/deployment:test3562:test3562-test-nginx-test-chart
-2019-05-07 16:40:27 INFO     successfully created ingress:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/ingresses/test3562:test3562nginx
+2019-05-07 16:40:07 INFO     using deployment url:https://10.1.1.1/v3/project/c-1234:p-nvlcn/workloads/deployment:test3562:test3562-test-nginx-test-chart
+2019-05-07 16:40:07 INFO     successfully deployed app:https://10.1.1.1/v3/project/c-1234:p-nvlcn/apps/p-nvlcn:test3562-test-nginx
+2019-05-07 16:40:07 INFO     successfully deployed workload:https://10.1.1.1/v3/project/c-1234:p-nvlcn/workloads/deployment:test3562:test3562-test-nginx-test-chart
+2019-05-07 16:40:27 INFO     successfully created ingress:https://10.1.1.1/v3/project/c-1234:p-nvlcn/ingresses/test3562:test3562nginx
 2019-05-07 16:40:28 INFO     successfully run cmd:['kubectl', 'get', 'pv', '-n', u'test3562']
-2019-05-07 16:40:28 INFO     successfully created volume:https://10.179.193.167/v3/cluster/c-qb62x/persistentVolumes/test-pv
-2019-05-07 16:40:33 INFO     successfully created volume claim:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/persistentVolumeClaims/test3562:test-claim
-2019-05-07 16:40:43 INFO     using deployment url:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/workloads/deployment:test3562:test3562-test-test-chart
-2019-05-07 16:40:43 INFO     successfully deployed app:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/apps/p-nvlcn:test3562-test
-2019-05-07 16:40:43 INFO     successfully deployed workload:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/workloads/deployment:test3562:test3562-test-test-chart
-2019-05-07 16:41:44 INFO     successfully created ingress:https://10.179.193.167/v3/project/c-qb62x:p-nvlcn/ingresses/test3562:test3562test
+2019-05-07 16:40:28 INFO     successfully created volume:https://10.1.1.1/v3/cluster/c-1234/persistentVolumes/test-pv
+2019-05-07 16:40:33 INFO     successfully created volume claim:https://10.1.1.1/v3/project/c-1234:p-nvlcn/persistentVolumeClaims/test3562:test-claim
+2019-05-07 16:40:43 INFO     using deployment url:https://10.1.1.1/v3/project/c-1234:p-nvlcn/workloads/deployment:test3562:test3562-test-test-chart
+2019-05-07 16:40:43 INFO     successfully deployed app:https://10.1.1.1/v3/project/c-1234:p-nvlcn/apps/p-nvlcn:test3562-test
+2019-05-07 16:40:43 INFO     successfully deployed workload:https://10.1.1.1/v3/project/c-1234:p-nvlcn/workloads/deployment:test3562:test3562-test-test-chart
+2019-05-07 16:41:44 INFO     successfully created ingress:https://10.1.1.1/v3/project/c-1234:p-nvlcn/ingresses/test3562:test3562test
 
 ```
 
 
 #### Flags
-  **--platform** ,sets the configuration file to use for the base platform, ***alf-on-azure*** is the only supported value at present
+  **--platform** ,sets the configuration file to use for the base platform, ***platfor˜m-1*** is the only supported value at present
 
   **--tenant** ,sets the prefix for all K8 resources for    example ***payroll123*** will create a ***payroll123-namespace*** namespace resource
 
@@ -58,11 +58,9 @@ Running devops-common-env-create
 
 
 #### Configuration file
-Base configuration items are set in a configuration file that is selected based on the **--platform** flag. The current ALF on Azure platform configuration file is access [here](./alf-examples/alf_config_example.json)
+Base configuration items are set in a configuration file that is selected based on the **--platform** flag. The current  platform configuration file is access [here](./examples/config_example.json)
 
 ### Resources created
-
-<img src="assets/resources.png" alt="pipe" width="1500" height="400"/>
 
 The following sections give examples of the Kubernetes resource cerated through Rancher
 
