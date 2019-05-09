@@ -46,7 +46,7 @@ Running env-create
 #### Flags
   **--platform** ,sets the configuration file to use for the base platform, ***platform-1*** is the only supported value at present
 
-  **--tenant** ,sets the prefix for all K8 resources for    example ***payroll123*** will create a ***payroll123-namespace*** namespace resource
+  **--tenant** ,sets the prefix for all K8 resources for    example ***payroll123*** will create a ***payroll123*** namespace resource
 
   **--charts** , sets the helm charts to install, a general name such as ***nginx*** should be used which will translate to a rancher catalog link (specified in the config file), if a package is included that is unknown it will ignored and a WARNING message logged (as seen in the example output)
 
@@ -141,7 +141,7 @@ Persistent Volume
             "uid": "a0727f5e-61e0-11e9-909d-0800276bc6a4"
         },
         "local": {
-            "path": "/Users/malorr/Downloads/rancher-vol2"
+            "path": "/server/rancher-vol2"
         },
         "nodeAffinity": {
             "required": {
